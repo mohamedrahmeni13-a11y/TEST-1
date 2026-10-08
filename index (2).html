@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>اختبار إلكتروني – الدوال التربيعية – الصف العاشر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maroon:#8A1538; --maroon-d:#6B0F2B; --maroon-soft:#F6E9EE;
+  --ink:#1E2235; --muted:#5D6275; --paper:#FBFCFE; --grid:#E3EAF3;
+  --gold:#C9A227; --ok:#1F8A5B; --ok-soft:#E5F4EC; --bad:#C23B3B; --bad-soft:#FBEAEA;
+  --line:#D5DAE3; --card:#FFFFFF;
+  --body:"IBM Plex Sans Arabic", Tahoma, "Segoe UI", Arial, sans-serif;
+  --head:"Reem Kufi", "IBM Plex Sans Arabic", Tahoma, sans-serif;
+  --math:"Cambria Math","Times New Roman", Georgia, serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:var(--body); color:var(--ink); line-height:1.7;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:26px 26px;
+  min-height:100vh;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 48px}
+
+/* Header */
+.top{background:var(--maroon);color:#fff;border-radius:18px 18px 4px 4px;padding:18px 22px 10px;position:relative;overflow:hidden}
+.top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.school{font-size:.9rem;opacity:.9}
+.top h1{font-family:var(--head);font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);margin:4px 0 0;line-height:1.3}
+.sub{font-size:.95rem;opacity:.85;margin:2px 0 0}
+.curve{display:block;width:100%;height:80px;margin-top:6px}
+.curve path.track{stroke:rgba(255,255,255,.35);stroke-width:2;fill:none;stroke-dasharray:4 5}
+.curve path.done{stroke:var(--gold);stroke-width:3;fill:none;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.curve circle{fill:var(--gold);stroke:#fff;stroke-width:3;transition:cx .5s ease, cy .5s ease}
+.curve text{fill:#fff;font-family:var(--body);font-size:12px;opacity:.85}
+.meta{display:flex;gap:18px;font-size:.9rem;opacity:.95;flex-wrap:wrap}
+.meta b{font-weight:600}
+
+/* Panels */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:4px 4px 18px 18px;padding:24px 22px;box-shadow:0 10px 30px -18px rgba(30,34,53,.35)}
+.hidden{display:none!important}
+
+/* Start */
+.start h2{font-family:var(--head);color:var(--maroon);margin:0 0 6px;font-size:1.4rem}
+.start p{margin:0 0 16px;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 20px;padding:0;list-style:none}
+.facts li{border-inline-start:4px solid var(--gold);background:var(--maroon-soft);padding:10px 12px;border-radius:6px;font-size:.95rem}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:600}
+.field input{font:inherit;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.field input:focus{outline:none;border-color:var(--maroon);box-shadow:0 0 0 3px var(--maroon-soft)}
+.err{color:var(--bad);font-size:.9rem;min-height:1.4em}
+
+/* Buttons */
+.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 22px;cursor:pointer;background:var(--maroon);color:#fff;transition:background .15s, transform .1s}
+.btn:hover{background:var(--maroon-d)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible,.opt:focus-visible,.dot:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn.ghost{background:transparent;color:var(--maroon);border:1.5px solid var(--maroon)}
+.btn.ghost:hover{background:var(--maroon-soft)}
+.btn.gold{background:var(--gold);color:var(--ink)}
+.btn.gold:hover{background:#b38f1f}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Question */
+.qhead{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.qnum{font-family:var(--head);font-size:1.6rem;color:var(--maroon);min-width:2.2em;height:2.2em;display:grid;place-items:center;border:2px solid var(--maroon);border-radius:50%;line-height:1}
+.qtopic{color:var(--muted);font-size:.92rem}
+.qtext{font-size:1.15rem;font-weight:500;margin:6px 0 16px}
+.m{font-family:var(--math);direction:ltr;unicode-bidi:isolate;display:inline-block;font-size:1.08em;white-space:nowrap}
+.m i{font-style:italic}
+.figure{display:flex;justify-content:center;margin:4px 0 16px}
+.figure svg{max-width:100%;height:auto;background:#fff;border:1px solid var(--line);border-radius:10px}
+table.vals{border-collapse:collapse;margin:0 auto 16px;direction:ltr;font-family:var(--math);font-size:1.05rem}
+table.vals th,table.vals td{border:1.5px solid var(--ink);padding:6px 16px;text-align:center}
+table.vals th{background:var(--maroon-soft)}
+.work{direction:ltr;font-family:var(--math);background:#F3F5F9;border:1px dashed var(--muted);border-radius:12px;padding:12px 20px;margin:0 auto 16px;max-width:340px;font-size:1.08rem;line-height:2}
+.work .cap{direction:rtl;font-family:var(--body);font-weight:700;font-size:.9rem;color:var(--muted);text-align:right}
+
+.opts{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.opt{width:100%;display:flex;align-items:center;gap:14px;text-align:start;font:inherit;font-size:1.05rem;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s, background .15s}
+.opt:hover{border-color:var(--maroon)}
+.opt .let{flex:0 0 auto;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-family:var(--body);font-weight:700;border:1.5px solid var(--ink);direction:ltr}
+.opt.sel{border-color:var(--maroon);background:var(--maroon-soft)}
+.opt.sel .let{background:var(--maroon);border-color:var(--maroon);color:#fff}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap}
+.count{color:var(--muted);font-size:.92rem}
+
+.mapbox{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.mapbox h3{margin:0 0 10px;font-size:1rem;font-family:var(--head);color:var(--maroon);font-weight:500}
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:7px}
+.dot{font:inherit;font-weight:600;height:40px;border-radius:8px;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.dot.ans{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.dot.cur{outline:3px solid var(--gold);outline-offset:1px}
+.legend{display:flex;gap:16px;margin-top:10px;font-size:.85rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px;border:1.5px solid var(--line);background:#fff}
+.legend span.a::before{background:var(--maroon);border-color:var(--maroon)}
+
+/* Result */
+.result-top{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.ring{width:150px;height:150px;flex:0 0 auto}
+.ring .bg{stroke:var(--grid);stroke-width:12;fill:none}
+.ring .fg{stroke:var(--maroon);stroke-width:12;fill:none;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s ease}
+.ring text{font-family:var(--head);fill:var(--ink)}
+.result-info h2{font-family:var(--head);margin:0;color:var(--maroon);font-size:1.6rem}
+.result-info p{margin:4px 0;color:var(--muted)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.stat{padding:6px 12px;border-radius:8px;font-weight:600;font-size:.92rem}
+.stat.ok{background:var(--ok-soft);color:var(--ok)}
+.stat.bad{background:var(--bad-soft);color:var(--bad)}
+.stat.na{background:#EEF0F4;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 6px}
+.review h3{font-family:var(--head);color:var(--maroon);font-weight:500;margin:22px 0 10px}
+.rev{border:1px solid var(--line);border-inline-start:5px solid var(--ok);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:#fff}
+.rev.wrong{border-inline-start-color:var(--bad)}
+.rev.skip{border-inline-start-color:var(--muted)}
+.rev .rq{font-weight:500;margin-bottom:6px}
+.rev .ra{font-size:.95rem}
+.rev .ra .you{color:var(--bad)}
+.rev.correct .ra .you{color:var(--ok)}
+.rev .ra .right{color:var(--ok);font-weight:600}
+.rev .ex{font-size:.9rem;color:var(--muted);margin-top:4px;border-top:1px dashed var(--line);padding-top:6px}
+
+footer{text-align:center;color:var(--muted);font-size:.82rem;margin-top:22px}
+
+@media (max-width:520px){
+  .panel{padding:18px 14px}
+  .qtext{font-size:1.05rem}
+  .ring{width:120px;height:120px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  body{background:#fff}
+  .actions,.mapbox,.curve,#quiz,#start{display:none!important}
+  .panel{box-shadow:none;border:0}
+  .rev{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="top-row">
+      <div>
+        <div class="school">مدرسة ابن تيمية الثانوية للبنين · قسم الرياضيات</div>
+        <h1>اختبار الدوال والمعادلات التربيعية</h1>
+        <p class="sub">الصف العاشر · منتصف الفصل الدراسي الأول 2025–2026</p>
+      </div>
+    </div>
+    <svg class="curve" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
+      <path class="track" d="M10 72 Q150 -52 290 72"/>
+      <path class="done" id="donePath" d="M10 72 Q150 -52 290 72"/>
+      <circle id="progDot" r="7" cx="10" cy="72"/>
+    </svg>
+    <div class="meta" id="metaBar"><span>25 سؤالًا</span><span>اختيار من متعدد</span></div>
+  </header>
+
+  <!-- Start screen -->
+  <section class="panel start" id="start">
+    <h2>قبل أن تبدأ</h2>
+    <p>اقرأ كل سؤال جيدًا ثم اختر الإجابة الصحيحة من بين أربعة بدائل. يمكنك التنقل بين الأسئلة وتغيير إجابتك قبل التسليم.</p>
+    <ul class="facts">
+      <li>25 سؤالًا، لكل سؤال درجة واحدة</li>
+      <li>تظهر النتيجة والإجابات الصحيحة بعد التسليم</li>
+      <li>يُحسب الوقت المستغرق تلقائيًا</li>
+    </ul>
+    <div class="field">
+      <label for="sname">اسم الطالب</label>
+      <input id="sname" type="text" autocomplete="name" placeholder="اكتب اسمك الثلاثي">
+    </div>
+    <div class="field">
+      <label for="sclass">الشعبة</label>
+      <input id="sclass" type="text" placeholder="مثال: 10/3">
+    </div>
+    <div class="err" id="startErr" role="alert"></div>
+    <button class="btn" id="startBtn">ابدأ الاختبار</button>
+  </section>
+
+  <!-- Quiz -->
+  <section id="quiz" class="hidden">
+    <div class="panel">
+      <div class="qhead">
+        <div class="qnum" id="qnum">1</div>
+        <div class="qtopic" id="qtopic"></div>
+      </div>
+      <div class="qtext" id="qtext"></div>
+      <div id="qextra"></div>
+      <ul class="opts" id="opts"></ul>
+      <div class="nav">
+        <button class="btn ghost" id="prevBtn">السؤال السابق</button>
+        <span class="count" id="ansCount"></span>
+        <button class="btn" id="nextBtn">السؤال التالي</button>
+      </div>
+    </div>
+    <div class="mapbox">
+      <h3>خريطة الأسئلة</h3>
+      <div class="map" id="map"></div>
+      <div class="legend"><span class="a">تمت الإجابة</span><span>لم تتم الإجابة</span></div>
+      <div style="margin-top:14px;text-align:center"><button class="btn gold" id="submitBtn">تسليم الاختبار</button></div>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section class="panel hidden" id="result">
+    <div class="result-top">
+      <svg class="ring" viewBox="0 0 150 150" aria-hidden="true">
+        <circle class="bg" cx="75" cy="75" r="62"/>
+        <circle class="fg" id="ringFg" cx="75" cy="75" r="62" stroke-dasharray="389.6" stroke-dashoffset="389.6"/>
+        <text x="75" y="72" text-anchor="middle" font-size="32" id="ringScore">0</text>
+        <text x="75" y="98" text-anchor="middle" font-size="15" fill="#5D6275">من 25</text>
+      </svg>
+      <div class="result-info">
+        <h2 id="resTitle"></h2>
+        <p id="resWho"></p>
+        <p id="resTime"></p>
+        <div class="stats" id="resStats"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="printBtn">طباعة النتيجة</button>
+      <button class="btn ghost" id="retryBtn">إعادة الاختبار</button>
+    </div>
+    <div class="review">
+      <h3>مراجعة الإجابات</h3>
+      <div id="reviewList"></div>
+    </div>
+  </section>
+
+  <footer>إعداد: أ. محمد جابر الرحماني · قسم الرياضيات</footer>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const M = s => `<span class="m">${s}</span>`;
+const x = '<i>x</i>';
+
+function graph(a,b,c,xr,yr,W=320,H=250){
+  const p=24, sx=v=>p+(v-xr[0])/(xr[1]-xr[0])*(W-2*p), sy=v=>H-p-(v-yr[0])/(yr[1]-yr[0])*(H-2*p);
+  let g=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="تمثيل بياني لدالة تربيعية"><defs><clipPath id="cl${a}${b}${c}"><rect x="${p}" y="${p}" width="${W-2*p}" height="${H-2*p}"/></clipPath></defs>`;
+  for(let i=Math.ceil(xr[0]);i<=xr[1];i++) g+=`<line x1="${sx(i)}" y1="${p}" x2="${sx(i)}" y2="${H-p}" stroke="#E3EAF3"/>`;
+  for(let j=Math.ceil(yr[0]);j<=yr[1];j++) g+=`<line x1="${p}" y1="${sy(j)}" x2="${W-p}" y2="${sy(j)}" stroke="#E3EAF3"/>`;
+  g+=`<line x1="${p-6}" y1="${sy(0)}" x2="${W-p+6}" y2="${sy(0)}" stroke="#1E2235" stroke-width="1.6"/>`;
+  g+=`<line x1="${sx(0)}" y1="${H-p+6}" x2="${sx(0)}" y2="${p-6}" stroke="#1E2235" stroke-width="1.6"/>`;
+  g+=`<text x="${W-p+2}" y="${sy(0)-6}" font-family="Times New Roman" font-style="italic" font-size="14">x</text>`;
+  g+=`<text x="${sx(0)+6}" y="${p-4}" font-family="Times New Roman" font-style="italic" font-size="14">y</text>`;
+  for(let i=Math.ceil(xr[0]);i<=xr[1];i++) if(i!==0) g+=`<text x="${sx(i)}" y="${sy(0)+15}" text-anchor="middle" font-size="11" font-family="Times New Roman" fill="#5D6275">${i}</text>`;
+  for(let j=Math.ceil(yr[0]);j<=yr[1];j++) if(j!==0) g+=`<text x="${sx(0)-5}" y="${sy(j)+4}" text-anchor="end" font-size="11" font-family="Times New Roman" fill="#5D6275">${j}</text>`;
+  let d='';
+  for(let t=xr[0]-1;t<=xr[1]+1;t+=0.05){const y=a*t*t+b*t+c; d+=(d?'L':'M')+sx(t).toFixed(1)+' '+sy(y).toFixed(1);}
+  g+=`<path d="${d}" fill="none" stroke="#8A1538" stroke-width="3" clip-path="url(#cl${a}${b}${c})"/></svg>`;
+  return `<div class="figure">${g}</div>`;
+}
+
+/* ---------- questions (ans = index of correct option) ---------- */
+const Q = [
+ {t:"التحويلات الهندسية", q:`ما وجه المقارنة بين التمثيل البياني للدالة ${M('<i>g</i>('+x+') = −0.7'+x+'<sup>2</sup>')} والتمثيل البياني للدالة الرئيسة ${M('<i>f</i>('+x+') = '+x+'<sup>2</sup>')}؟`,
+  o:["مفتوح للأسفل وأكثر اتساعًا","مفتوح للأسفل وأقل اتساعًا","مفتوح للأعلى وأكثر اتساعًا","مفتوح للأعلى وأقل اتساعًا"],a:0,
+  e:"المعامل a سالب فالمنحنى مفتوح للأسفل، و |a| = 0.7 أصغر من 1 فيكون أكثر اتساعًا."},
+ {t:"التحويلات الهندسية", q:`ما وجه المقارنة بين التمثيل البياني للدالة ${M('<i>g</i>('+x+') = 3'+x+'<sup>2</sup>')} والتمثيل البياني للدالة الرئيسة ${M('<i>f</i>('+x+') = '+x+'<sup>2</sup>')}؟`,
+  o:["مفتوح للأعلى وأقل اتساعًا","مفتوح للأعلى وأكثر اتساعًا","مفتوح للأسفل وأقل اتساعًا","مفتوح للأسفل وأكثر اتساعًا"],a:0,
+  e:"a = 3 موجب فالمنحنى مفتوح للأعلى، و |a| > 1 فيكون أقل اتساعًا (أضيق)."},
+ {t:"التحويلات الهندسية", q:`ما وجه المقارنة بين التمثيل البياني للدالة ${M('<i>g</i>('+x+') = '+x+'<sup>2</sup> + 1')} والتمثيل البياني للدالة ${M('<i>f</i>('+x+') = '+x+'<sup>2</sup>')}؟`,
+  o:["إزاحة التمثيل البياني للدالة f(x) وحدة واحدة للأعلى","إزاحة التمثيل البياني للدالة f(x) وحدة واحدة للأسفل","إزاحة التمثيل البياني للدالة f(x) وحدة واحدة لليسار","إزاحة التمثيل البياني للدالة f(x) وحدة واحدة لليمين"],a:0,
+  e:"إضافة عدد موجب خارج التربيع تُزيح المنحنى رأسيًا للأعلى."},
+ {t:"التحويلات الهندسية", q:`ما التحويل الذي يحوّل منحنى ${M('<i>f</i>('+x+') = '+x+'<sup>2</sup>')} إلى منحنى ${M('<i>g</i>('+x+') = ('+x+' − 2)<sup>2</sup>')}؟`,
+  o:["إزاحة وحدتين لليمين","إزاحة وحدتين لليسار","إزاحة وحدتين للأعلى","إزاحة وحدتين للأسفل"],a:0,
+  e:"الصورة (x − h)² مع h = 2 تعني إزاحة أفقية لليمين بمقدار وحدتين."},
+ {t:"صيغة الرأس", q:`ما إحداثيات رأس منحنى الدالة ${M('<i>g</i>('+x+') = ('+x+' + 3)<sup>2</sup> − 4')}؟`,
+  o:[M('(−3, −4)'),M('(3, −4)'),M('(−3, 4)'),M('(3, 4)')],a:0,
+  e:"صيغة الرأس a(x − h)² + k رأسها (h, k)، وهنا x + 3 = x − (−3) إذن الرأس (−3, −4)."},
+ {t:"الحل بيانيًا", q:"اعتمادًا على الرسم البياني أدناه، ما حلول المعادلة التربيعية المرتبطة به؟", extra:graph(-1,-1,6,[-5,5],[-3,7]),
+  o:[M('<i>x</i><sub>1</sub> = −3 ,  <i>x</i><sub>2</sub> = 2'),M('<i>x</i><sub>1</sub> = 0 ,  <i>x</i><sub>2</sub> = 6'),M('<i>x</i><sub>1</sub> = −2 ,  <i>x</i><sub>2</sub> = −3'),M('<i>x</i><sub>1</sub> = 3 ,  <i>x</i><sub>2</sub> = −2')],a:0,
+  e:"الحلول هي نقاط تقاطع المنحنى مع محور x، وهي x = −3 و x = 2."},
+ {t:"خاصية الضرب الصفري", q:`ما حلول المعادلة التربيعية ${M('('+x+' − 5)('+x+' + 4) = 0')}؟`,
+  o:[M('{5, −4}'),M('{5, 4}'),M('{−5, 4}'),M('{−5, −4}')],a:0,
+  e:"x − 5 = 0 ⇒ x = 5 ، و x + 4 = 0 ⇒ x = −4."},
+ {t:"خاصية الضرب الصفري", q:`ما حلول المعادلة ${M(x+'('+x+' − 7) = 0')}؟`,
+  o:[M('{0, 7}'),M('{7}'),M('{0, −7}'),M('{1, 7}')],a:0,
+  e:"إما x = 0 أو x − 7 = 0 أي x = 7، ولا ننسى الحل الصفري."},
+ {t:"الجذور التربيعية", q:`أي من المقادير التالية يكافئ المقدار ${M('√(8'+x+'<sup>3</sup>) × √(32'+x+')')}؟`,
+  o:[M('16'+x+'<sup>2</sup>'),M('40'+x+'<sup>2</sup>'),M('8'+x+'√'+x),M('32'+x+'<sup>3</sup>√'+x)],a:0,
+  e:"√(8x³ · 32x) = √(256x⁴) = 16x²."},
+ {t:"الجذور التربيعية", q:`ما أبسط صورة للمقدار ${M('√50')}؟`,
+  o:[M('5√2'),M('2√5'),M('25√2'),M('10√5')],a:0,
+  e:"√50 = √(25 · 2) = 5√2."},
+ {t:"الجذور التربيعية", q:`ما ناتج ${M('√12 × √3')}؟`,
+  o:[M('6'),M('36'),M('2√3'),M('9')],a:0,
+  e:"√12 × √3 = √36 = 6."},
+ {t:"إكمال المربع", q:`ما قيمة الثابت ${M('<i>c</i>')} التي تجعل المقدار ${M(x+'<sup>2</sup> + 8'+x+' + <i>c</i>')} مربعًا كاملًا؟`,
+  o:[M('16'),M('4'),M('8'),M('64')],a:0,
+  e:"c = (b ÷ 2)² = (8 ÷ 2)² = 16."},
+ {t:"إكمال المربع", q:`ما قيمة ${M('<i>c</i>')} التي تجعل ${M(x+'<sup>2</sup> − 10'+x+' + <i>c</i>')} مربعًا كاملًا؟`,
+  o:[M('25'),M('−25'),M('5'),M('100')],a:0,
+  e:"c = (−10 ÷ 2)² = (−5)² = 25."},
+ {t:"تطبيقات حياتية", q:`ألقى رائد فضاء صخرة على سطح القمر، ويُعطى ارتفاعها بالأمتار بعد ${M(x)} ثانية بالدالة ${M('<i>f</i>('+x+') = −4('+x+' − 1)<sup>2</sup> + 7')}. ما أقصى ارتفاع للصخرة؟`,
+  o:["7 أمتار","4 أمتار","1 متر","3 أمتار"],a:0,
+  e:"الرأس (1, 7) والمنحنى مفتوح للأسفل، فأقصى ارتفاع هو k = 7 أمتار."},
+ {t:"تطبيقات حياتية", q:`بالرجوع إلى الدالة ${M('<i>f</i>('+x+') = −4('+x+' − 1)<sup>2</sup> + 7')}، بعد كم ثانية من الإلقاء تبلغ الصخرة أقصى ارتفاع؟`,
+  o:["بعد ثانية واحدة","بعد 7 ثوانٍ","بعد 4 ثوانٍ","لحظة الإلقاء"],a:0,
+  e:"الإحداثي x للرأس هو h = 1، أي بعد ثانية واحدة."},
+ {t:"التزايد والتناقص", q:`اعتمادًا على جدول القيم أدناه، حدّد قيم ${M(x)} التي تكون عندها الدالة ${M('<i>g</i>('+x+') = '+x+'<sup>2</sup>')} متزايدة.`,
+  extra:`<table class="vals"><tr><th><i>x</i></th><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td></tr><tr><th><i>g</i>(<i>x</i>)</th><td>4</td><td>1</td><td>0</td><td>1</td><td>4</td></tr></table>`,
+  o:[M(x+' > 0'),M(x+' < 0'),"جميع الأعداد الحقيقية",M(x+' > 4')],a:0,
+  e:"تتناقص القيم حتى x = 0 ثم تزداد، إذن الدالة متزايدة عندما x > 0."},
+ {t:"خصائص الدالة التربيعية", q:`ما معادلة محور التناظر لمنحنى الدالة ${M('<i>f</i>('+x+') = 2'+x+'<sup>2</sup> − 4'+x+' + 3')}؟`, extra:graph(2,-4,3,[-2,4],[-1,5]),
+  o:[M(x+' = 1'),M(x+' = −1'),M(x+' = 2'),M(x+' = 3')],a:0,
+  e:"x = −b ÷ 2a = 4 ÷ 4 = 1."},
+ {t:"خصائص الدالة التربيعية", q:`ما رأس منحنى الدالة ${M('<i>f</i>('+x+') = 2'+x+'<sup>2</sup> − 4'+x+' + 3')}؟`,
+  o:[M('(1, 1)'),M('(−1, 9)'),M('(1, 3)'),M('(2, 3)')],a:0,
+  e:"x = 1 ثم f(1) = 2 − 4 + 3 = 1، فالرأس (1, 1)."},
+ {t:"خصائص الدالة التربيعية", q:`ما المقطع ${M('<i>y</i>')} لمنحنى الدالة ${M('<i>f</i>('+x+') = 2'+x+'<sup>2</sup> − 4'+x+' + 3')}؟`,
+  o:[M('3'),M('1'),M('−4'),M('2')],a:0,
+  e:"المقطع y هو f(0) = c = 3."},
+ {t:"الحل باستعمال جدول", q:"ما حل المعادلة التربيعية المرتبطة بالجدول التالي؟",
+  extra:`<table class="vals"><tr><th><i>x</i></th><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td></tr><tr><th><i>f</i>(<i>x</i>)</th><td>0</td><td>−3</td><td>−4</td><td>−3</td><td>0</td></tr></table>`,
+  o:[M('{−2, 2}'),M('{−4}'),M('{−1, 1}'),M('{0}')],a:0,
+  e:"الحلول هي قيم x التي تجعل f(x) = 0، وهي x = −2 و x = 2."},
+ {t:"الحل بالتحليل", q:`ما حلول المعادلة ${M(x+'<sup>2</sup> − 10'+x+' + 21 = 0')} بالتحليل إلى العوامل؟`,
+  o:[M('{3, 7}'),M('{−3, −7}'),M('{3, −7}'),M('{1, 21}')],a:0,
+  e:"(x − 3)(x − 7) = 0 لأن 3 × 7 = 21 و 3 + 7 = 10، إذن x = 3 أو x = 7."},
+ {t:"تحليل الخطأ", q:`حلّ أحد الطلاب المعادلة ${M(x+'<sup>2</sup> + 4'+x+' = 11')} بإكمال المربع كما يلي. أين الخطأ في حله؟`,
+  extra:`<div class="work"><div class="cap">حل الطالب</div><i>x</i><sup>2</sup> + 4<i>x</i> = 11<br><i>x</i><sup>2</sup> + 4<i>x</i> + 4 = 11 + 4<br>(<i>x</i> + 2)<sup>2</sup> = 15<br><i>x</i> + 2 = ±√15<br><i>x</i> = 2 ± √15</div>`,
+  o:[`في الخطوة الأخيرة؛ الصحيح ${M(x+' = −2 ± √15')}`,`في الخطوة الثانية؛ كان يجب إضافة 16 للطرفين`,`في الخطوة الثالثة؛ الصحيح ${M('('+x+' − 2)<sup>2</sup> = 15')}`,"لا يوجد خطأ في الحل"],a:0,
+  e:"عند نقل 2 إلى الطرف الآخر تُطرح: x = −2 ± √15."},
+ {t:"المميز", q:`ما قيمة المميز للمعادلة التربيعية ${M('2'+x+'<sup>2</sup> − 3'+x+' + 1 = 0')}؟`,
+  o:[M('1'),M('17'),M('−1'),M('9')],a:0,
+  e:"Δ = b² − 4ac = 9 − 8 = 1، وبما أنه موجب فللمعادلة حلان حقيقيان."},
+ {t:"المميز", q:`ما عدد الحلول الحقيقية للمعادلة ${M(x+'<sup>2</sup> + 2'+x+' + 5 = 0')}؟`,
+  o:["لا يوجد حلول حقيقية","حل حقيقي واحد","حلان حقيقيان","ثلاثة حلول حقيقية"],a:0,
+  e:"Δ = 4 − 20 = −16 < 0، إذن لا يوجد حلول حقيقية."},
+ {t:"القانون العام", q:`ما حلول المعادلة ${M(x+'<sup>2</sup> − 4'+x+' − 7 = 0')} باستعمال القانون العام؟`,
+  o:[M(x+' = 2 ± √11'),M(x+' = −2 ± √11'),M(x+' = 2 ± √44'),M(x+' = 4 ± √11')],a:0,
+  e:"x = (4 ± √(16 + 28)) ÷ 2 = (4 ± 2√11) ÷ 2 = 2 ± √11."}
+];
+
+/* ---------- state ---------- */
+const L = ['A','B','C','D'];
+let order=[], answers=[], cur=0, startTime=0, student={};
+const $ = id => document.getElementById(id);
+
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+function init(){
+  order = Q.map(()=>shuffle([0,1,2,3]));
+  answers = Array(Q.length).fill(null);
+  cur = 0;
+}
+
+/* progress parabola */
+function setProgress(){
+  const t = Q.length>1 ? cur/(Q.length-1) : 1;
+  const X = 10*(1-t)*(1-t) + 2*t*(1-t)*150 + 290*t*t;
+  const Y = 72*(1-t)*(1-t) + 2*t*(1-t)*(-52) + 72*t*t;
+  $('progDot').setAttribute('cx',X); $('progDot').setAttribute('cy',Y);
+  const p=$('donePath'), len=p.getTotalLength();
+  p.style.strokeDasharray=len; p.style.strokeDashoffset=len*(1-t);
+}
+
+function render(){
+  const item=Q[cur];
+  $('qnum').textContent=cur+1;
+  $('qtopic').textContent=item.t;
+  $('qtext').innerHTML=item.q;
+  $('qextra').innerHTML=item.extra||'';
+  const ul=$('opts'); ul.innerHTML='';
+  order[cur].forEach((orig,pos)=>{
+    const li=document.createElement('li');
+    const b=document.createElement('button');
+    b.className='opt'+(answers[cur]===orig?' sel':'');
+    b.setAttribute('aria-pressed',answers[cur]===orig);
+    b.innerHTML=`<span class="let">${L[pos]}</span><span>${item.o[orig]}</span>`;
+    b.onclick=()=>{answers[cur]=orig; render();};
+    li.appendChild(b); ul.appendChild(li);
+  });
+  $('prevBtn').disabled = cur===0;
+  $('nextBtn').textContent = cur===Q.length-1 ? 'إنهاء ومراجعة' : 'السؤال التالي';
+  const done=answers.filter(v=>v!==null).length;
+  $('ansCount').textContent=`أُجيب عن ${done} من ${Q.length}`;
+  const map=$('map'); map.innerHTML='';
+  Q.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='dot'+(answers[i]!==null?' ans':'')+(i===cur?' cur':'');
+    d.textContent=i+1; d.setAttribute('aria-label','السؤال '+(i+1));
+    d.onclick=()=>{cur=i;render();};
+    map.appendChild(d);
+  });
+  setProgress();
+}
+
+$('startBtn').onclick=()=>{
+  const n=$('sname').value.trim();
+  if(!n){$('startErr').textContent='اكتب اسمك قبل بدء الاختبار.';$('sname').focus();return;}
+  student={name:n, cls:$('sclass').value.trim()};
+  $('startErr').textContent='';
+  init(); startTime=Date.now();
+  $('start').classList.add('hidden'); $('quiz').classList.remove('hidden');
+  $('metaBar').innerHTML=`<span>الطالب: <b>${escapeHtml(n)}</b></span>`+(student.cls?`<span>الشعبة: <b>${escapeHtml(student.cls)}</b></span>`:'');
+  render(); window.scrollTo(0,0);
+};
+$('prevBtn').onclick=()=>{if(cur>0){cur--;render();}};
+$('nextBtn').onclick=()=>{if(cur<Q.length-1){cur++;render();window.scrollTo({top:0,behavior:'smooth'});} else $('submitBtn').focus();};
+$('submitBtn').onclick=()=>{
+  const left=answers.filter(v=>v===null).length;
+  if(left>0 && !confirm(`لم تُجب عن ${left} سؤالًا. هل تريد تسليم الاختبار؟`)) return;
+  finish();
+};
+
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function finish(){
+  const secs=Math.round((Date.now()-startTime)/1000);
+  let ok=0,bad=0,na=0;
+  answers.forEach((v,i)=>{ if(v===null) na++; else if(v===Q[i].a) ok++; else bad++; });
+  $('quiz').classList.add('hidden'); $('result').classList.remove('hidden');
+  const pct=ok/Q.length;
+  $('ringScore').textContent=ok;
+  requestAnimationFrame(()=>{$('ringFg').style.strokeDashoffset=389.6*(1-pct);});
+  $('ringFg').style.stroke = pct>=.85?'#1F8A5B':pct>=.5?'#8A1538':'#C23B3B';
+  $('resTitle').textContent = pct>=.9?'ممتاز، أداء رائع':pct>=.75?'جيد جدًا':pct>=.5?'جيد، تحتاج إلى مراجعة بعض المهارات':'تحتاج إلى مراجعة الدرس من جديد';
+  $('resWho').textContent = `${student.name}${student.cls?' · الشعبة '+student.cls:''} · النسبة ${Math.round(pct*100)}%`;
+  $('resTime').textContent = `الوقت المستغرق: ${Math.floor(secs/60)} دقيقة و ${secs%60} ثانية`;
+  $('resStats').innerHTML=`<span class="stat ok">صحيحة: ${ok}</span><span class="stat bad">خاطئة: ${bad}</span><span class="stat na">بدون إجابة: ${na}</span>`;
+  $('metaBar').innerHTML=`<span>الطالب: <b>${escapeHtml(student.name)}</b></span><span>الدرجة: <b>${ok} / ${Q.length}</b></span>`;
+  cur=Q.length-1; setProgress();
+  const list=$('reviewList'); list.innerHTML='';
+  Q.forEach((item,i)=>{
+    const v=answers[i], state = v===null?'skip':(v===item.a?'correct':'wrong');
+    const letterOf = orig => L[order[i].indexOf(orig)];
+    const div=document.createElement('div');
+    div.className='rev '+state;
+    div.innerHTML=`<div class="rq"><b>${i+1}.</b> ${item.q}</div>
+      <div class="ra">${v===null?'<span class="you">لم تُجب عن هذا السؤال</span>':`إجابتك: <span class="you">(${letterOf(v)}) ${item.o[v]}</span>`}
+      ${state!=='correct'?`<br>الإجابة الصحيحة: <span class="right">(${letterOf(item.a)}) ${item.o[item.a]}</span>`:''}</div>
+      <div class="ex">${item.e}</div>`;
+    list.appendChild(div);
+  });
+  window.scrollTo(0,0);
+}
+
+$('printBtn').onclick=()=>window.print();
+$('retryBtn').onclick=()=>{
+  $('result').classList.add('hidden'); $('quiz').classList.remove('hidden');
+  $('ringFg').style.strokeDashoffset=389.6;
+  init(); startTime=Date.now();
+  $('metaBar').innerHTML=`<span>الطالب: <b>${escapeHtml(student.name)}</b></span>`+(student.cls?`<span>الشعبة: <b>${escapeHtml(student.cls)}</b></span>`:'');
+  render(); window.scrollTo(0,0);
+};
+$('sname').addEventListener('keydown',e=>{if(e.key==='Enter')$('startBtn').click();});
+setProgress();
+</script>
+</body>
+</html>
